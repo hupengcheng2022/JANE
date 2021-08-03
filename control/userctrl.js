@@ -242,7 +242,7 @@ module.exports.doEdituserpsw=function (req, res) {
             res.send(err1.message);
         }else{
             if (results1.length==0){
-                res.render('edituserpsw',{msg:'密码错误！',user:req.session.curuser});
+                res.render('edituserpsw',{msg:'原密码错误！',user:req.session.curuser});
             }else{
                 let sql2="update users set psw=? where userid=?";
                 dbutil(sql2,[xpsw,userid],function (err2,results2) {
