@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>找回密码</title>
+    <link rel="icon" href="favicon.ico" type="image/ico">
+    <meta name="author" content="yinqi">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="/css/style.min.css" rel="stylesheet">
+    <script src="/js/check.js"></script>
+    <!--  <script>
+        function geta() {
+          if (confirm("是否更新信息？")){
+
+            alert("更新成功！");
+          }
+        }
+      </script>-->
+</head>
+
+<body>
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <!--页面主要内容-->
+        <main class="lyear-layout-sidebar-close" style="margin: 40px auto;width: 80%;">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h3 align="center">找回密码</h3><br>
+                                <form method="post" action="/doretrievepsw" class="site-form">
+                                    <div class="form-group">
+                                        <label>用户名</label>
+                                        <input type="text" class="form-control" name="username" placeholder="输入您的用户名" onblur="checkUsername(this)">
+                                        <center><span id="username"></span></center>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="question">找回密码问题</label>
+                                        <input type="text" class="form-control" name="question" id="question" placeholder="输入您的问题">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="answer">找回密码答案</label>
+                                        <input type="text" class="form-control" name="answer" id="answer" placeholder="输入您的答案">
+                                    </div>
+                                    <center><button type="submit" id="submit1" class="btn btn-primary">找回密码</button>
+                                        <div style="color:red; text-align: center;">{{msg}}</div>
+                                    </center>
+                                </form>
+                                <form action="/login" method="get">
+                                <button class="btn btn-primary">返回</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+        <!--End 页面主要内容-->
+    </div>
+</div>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/perfect-scrollbar.min.js"></script>
+<script type="text/javascript" src="/js/main.min.js"></script>
+<script type="text/javascript">
+    $(function(){
+        $('.search-bar .dropdown-menu a').click(function() {
+            var field = $(this).data('field') || '';
+            $('#search-field').val(field);
+            $('#search-btn').html($(this).text() + ' <span class="caret"></span>');
+        });
+    });
+</script>
+</body>
+</html>

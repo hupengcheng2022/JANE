@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <title>登录注册</title>
+    <link rel="stylesheet" href="/css/login.css">
+    <script src="/js/check.js"></script>
+<!--    <link rel="stylesheet" href="../../../AppData/Local/Temp/360zip$Temp/360$2/style.css">-->
+</head>
+
+<body>
+<div class="content">
+
+   <!-- <a href="/" style="text-decoration: none;color: black;float: right;">返回首页</a>-->
+    <form class="form sign-in" method="post" action="/doLogin">
+        <h2>登录</h2>
+        <label>
+            <span>用户名</span>
+            <input class="name" type="text" name="username" required onblur="checkUsername(this)"/>
+            <span id="username"></span>
+        </label>
+        <label>
+            <span>密码</span>
+            <input class="password" type="password" name="password" required/>
+        </label>
+        <p class="forgot-pass"><a href="/retrievepsw" style="text-decoration: none;">忘记密码？</a></p>
+        <button type="submit" id="submit1" class="submit">登 录</button>
+        <center><a href="/" style="text-decoration: none;color: black;">返回首页</a></center><br>
+        <div style="color:red; text-align: center;">{{msgs}}</div>
+        <div style="color:red; text-align: center;">{{msg}}</div>
+    </form>
+    <div class="sub-cont">
+        <div class="img">
+            <div class="img__text m--up">
+                <h2>还未注册？</h2>
+                <p>立即注册，发现大量宝贝！</p>
+            </div>
+            <div class="img__text m--in">
+                <h2>已有帐号？</h2>
+                <p>有帐号就登录吧，好久不见了！</p>
+            </div>
+            <div class="img__btn">
+                <span class="m--up">注 册</span>
+                <span class="m--in">登 录</span>
+            </div>
+        </div>
+        <form class="form sign-up" action="/doRegist" method="post" style="top: -50px;">
+            <a href="/" style="text-decoration: none;color: black;">返回首页</a>
+            <h2>注册</h2>
+            <label>
+                <span>姓名</span>
+                <input name="realname" type="text" required/>
+            </label>
+            <label>
+                <span>用户名</span>
+                <input name="username" type="text" required onblur="checkUsername1(this)"/>
+                <span id="username1"></span>
+            </label>
+            <label>
+                <span>密码</span>
+                <input name="psw" type="password" id="password3" onblur="checkPassword()"/>
+                <span id="password1"></span>
+            </label>
+            <label>
+                <span>重复密码</span>
+                <input type="password" id="password4" onblur="checkPassword1()"/>
+                <span id="password2"></span>
+            </label>
+            <button type="submit" id="submit2" class="submit">注 册</button>
+            <!--<center><a href="/" style="text-decoration: none;color: black;">返回首页</a></center><br>-->
+            <div style="color:red; text-align: center;">{{msg}}</div>
+        </form>
+    </div>
+</div>
+
+<script src="/js/script.js"></script>
+
+</body>
+
+</html>

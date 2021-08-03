@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>个人订单</title>
+<link rel="icon" href="favicon.ico" type="image/ico">
+<meta name="author" content="yinqi">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/materialdesignicons.min.css" rel="stylesheet">
+<link href="/css/style.min.css" rel="stylesheet">
+  <script>
+    function showpayment(element) {
+      var oid=element.name;
+      location.href = "/showpayment?ordernumber=" + oid;
+    }
+    function docollect(element) {
+      var oid=element.name;
+      if (confirm("确认收货？")){
+        location.href = "/docollect?ordernumber=" + oid;
+      }
+    }
+    function docancel(element) {
+      var oid=element.name;
+      if (confirm("确认取消订单？")){
+        location.href = "/cancel?ordernumber=" + oid;
+      }
+    }
+    function refund(element) {
+      var oid=element.name;
+      if (confirm("确认申请？")){
+        location.href = "/refund?ordernumber=" + oid;
+      }
+    }
+    function showorderdetail(element) {
+      var oid=element.name;
+        location.href = "/showorderdetail?ordernumber=" + oid;
+    }
+  </script>
+</head>
+  
+<body>
+<div class="lyear-layout-web">
+  <div class="lyear-layout-container">
+    <!--左侧导航-->
+    <!--End 左侧导航-->
+    
+    <!--头部信息-->
+    <header class="lyear-layout-header">
+      
+      <nav class="navbar navbar-default">
+        <div class="topbar">
+          <div class="topbar-left">
+            <span class="navbar-page-title"><i class="mdi mdi-content-paste"></i> 订单 </span>
+          </div>
+          
+          <ul class="topbar-right">
+            <li class="dropdown dropdown-profile">
+              <a href="javascript:void(0)" data-toggle="dropdown">
+                <img class="img-avatar img-avatar-48 m-r-10" src="/images/clothes/{{user.handportrait}}" alt="{{user.username}}" />
+                <span>{{user.username}} <span class="caret"></span></span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-right">
+                <li> <a href="/"><i class="mdi mdi-home"></i> 首页</a></li>
+                <li><a class="dropdown-item" href="/shopcart"><i class="mdi mdi-cart"></i> 购物车</a></li>
+                <!--<li> <a href="/edituserpsw"><i class="mdi mdi-lock-outline"></i> 修改密码</a> </li>-->
+                <!--<li> <a href="javascript:void(0)"><i class="mdi mdi-delete"></i> 清空缓存</a></li>-->
+                <li class="divider"></li>
+                <li> <a href="/admin/exit"><i class="mdi mdi-logout-variant"></i> 退出登录</a> </li>
+              </ul>
+            </li>
+            <!--切换主题配色-->
+            <!--切换主题配色-->
+          </ul>
+          
+        </div>
+      </nav>
+      
+    </header>
+    <!--End 头部信息-->
+    
+    <!--页面主要内容-->
+    <main class="lyear-layout-sidebar-close" style="margin: 80px auto;width: 80%;">
+      <div class="card-body">
+        <ul class="nav nav-tabs nav-justified">
+          <li class="active">
+            <a data-toggle="tab" href="#home-basic">待付款</a>
+          </li>
+          <li class="nav-item">
+            <a data-toggle="tab" href="#profile-basic">已付款</a>
+          </li>
+          <li class="nav-item">
+            <a data-toggle="tab" href="#messages-basic">待收货</a>
+          </li>
+          <li class="nav-item">
+            <a data-toggle="tab" href="#settings-basic">评论</a>
+          </li>
+          <li class="nav-item">
+            <a data-toggle="tab" href="#settings-basics">退款</a>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane fade active in" id="home-basic">
+            {{each orders item}}
+            {{if item.state=='0'}}
+            <hr>
+            <h5>订单号:{{item.ordernumber}}</h5>
+            <h5>下单时间:{{item.time}}</h5>
+            <h5>总计:{{item.total}}</h5>
+            <h5>状态:待付款</h5>
+            <div style="float: right;margin-top: -40px">
+            <button class="btn btn-danger" name="{{item.ordernumber}}" onclick="docancel(this)">取消订单</button>
+            <button class="btn btn-primary" name="{{item.ordernumber}}" onclick="showpayment(this)">去付款</button>
+            </div>
+            <hr>
+            {{/if}}
+            {{/each}}
+          </div>
+          <div class="tab-pane fade" id="profile-basic">
+            {{each orders item}}
+            {{if item.state=='1'}}
+            {{if item.rstate=='0'||item.rstate=='1'||item.rstate=='3'}}
+            <hr>
+            <h5>订单号:{{item.ordernumber}}</h5>
+            <h5>下单时间:{{item.time}}</h5>
+            <h5>总计:{{item.total}}</h5>
+            <h5>
+              状态:
+              {{if item.rstate=='0'}}
+              已付款，待发货
+              {{else if item.rstate=='1'}}
+              退款中
+              {{else if item.rstate=='3'}}
+              退款失败
+              {{/if}}
+            </h5>
+            <div style="float: right;margin-top: -40px">
+              {{if item.rstate=='0'}}
+              <button class="btn btn-danger" name="{{item.ordernumber}}" onclick="refund(this)">申请退款</button>
+              {{else if item.rstate=='1'}}
+              <button class="btn btn-danger">退款中</button>
+              {{else if item.rstate=='3'}}
+              <button class="btn btn-danger" name="{{item.ordernumber}}" onclick="refund(this)">退款失败（再次申请退款）</button>
+              {{/if}}
+              <button class="btn btn-primary" name="{{item.ordernumber}}" onclick="showorderdetail(this)">修改地址</button>
+              <button class="btn btn-primary">提醒发货</button>
+            </div>
+            <hr>
+            {{/if}}
+            {{/if}}
+            {{/each}}
+          </div>
+          <div class="tab-pane fade" id="messages-basic">
+            {{each orders item}}
+            {{if item.state=='2'}}
+            {{if item.rstate=='0'||item.rstate=='1'||item.rstate=='3'}}
+            <hr>
+            <h5>订单号:{{item.ordernumber}}</h5>
+            <h5>下单时间:{{item.time}}</h5>
+            <h5>总计:{{item.total}}</h5>
+            <h5>
+              状态:
+              {{if item.rstate=='0'}}
+              已付款，待发货
+              {{else if item.rstate=='1'}}
+              退款中
+              {{else if item.rstate=='3'}}
+              退款失败
+              {{/if}}
+            </h5>
+            <div style="float: right;margin-top: -40px">
+              {{if item.rstate=='0'}}
+                <button class="btn btn-danger" name="{{item.ordernumber}}" onclick="refund(this)">申请退货</button>
+              {{else if item.rstate=='1'}}
+                <button class="btn btn-danger">退货中</button>
+              {{else if item.rstate=='3'}}
+              <button class="btn btn-danger" name="{{item.ordernumber}}" onclick="refund(this)">退货失败（再次申请退货）</button>
+              {{/if}}
+                <button class="btn btn-primary" name="{{item.ordernumber}}" onclick="showorderdetail(this)">查看详情</button>
+                <button class="btn btn-primary" name="{{item.ordernumber}}" onclick="docollect(this)">确认收货</button>
+            </div>
+            <hr>
+            {{/if}}
+            {{/if}}
+            {{/each}}
+          </div>
+          <div class="tab-pane fade" id="settings-basic">
+            {{each orders item}}
+            {{if item.state=='3'}}
+            <hr>
+            <h5>订单号:{{item.ordernumber}}</h5>
+            <h5>下单时间:{{item.time}}</h5>
+            <h5>总计:{{item.total}}</h5>
+            <h5>状态:已收货，待评论</h5>
+            <div style="float: right;margin-top: -40px">
+                <button class="btn btn-primary" name="{{item.ordernumber}}" onclick="showorderdetail(this)">查看详情</button>
+            </div>
+            <hr>
+            {{/if}}
+            {{/each}}
+          </div>
+          <div class="tab-pane fade" id="settings-basics">
+            {{each orders item}}
+            {{if item.rstate=='2'}}
+            <hr>
+            <h5>订单号:{{item.ordernumber}}</h5>
+            <h5>下单时间:{{item.time}}</h5>
+            <h5>总计:{{item.total}}</h5>
+            <h5>状态:已退款</h5>
+            <div style="float: right;margin-top: -40px">
+                <button class="btn btn-primary" name="{{item.ordernumber}}" onclick="showorderdetail(this)">查看详情</button>
+            </div>
+            <hr>
+            {{/if}}
+            {{/each}}
+          </div>
+        </div>
+      </div>
+    </main>
+    <!--End 页面主要内容-->
+  </div>
+</div>
+
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/perfect-scrollbar.min.js"></script>
+<script type="text/javascript" src="/js/main.min.js"></script>
+<script type="text/javascript">
+  $(function(){
+    $('.search-bar .dropdown-menu a').click(function() {
+      var field = $(this).data('field') || '';
+      $('#search-field').val(field);
+      $('#search-btn').html($(this).text() + ' <span class="caret"></span>');
+    });
+  });
+</script>
+</body>
+</html>

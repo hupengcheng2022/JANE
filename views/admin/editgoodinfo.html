@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>编辑商品信息</title>
+    <link rel="icon" href="favicon.ico" type="image/ico">
+<!--<meta name="author" content="yinqi">-->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="/css/style.min.css" rel="stylesheet">
+</head>
+
+<body>
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <!--左侧导航-->
+        <aside class="lyear-layout-sidebar">
+
+            <!-- logo -->
+            <div id="logo" class="sidebar-header">
+                <a><img src="/images/logo-sidebar.png" title="JANE" alt="JANE" /></a>
+            </div>
+            <div class="lyear-layout-sidebar-scroll">
+
+                <nav class="sidebar-main">
+                    <ul class="nav nav-drawer">
+                        <li class="nav-item"> <a href="/admin/admin"><i class="mdi mdi-home"></i> 后台首页</a> </li>
+                        <li class="nav-item"> <a href="/admin/userslist"><i class="mdi mdi-account-multiple"></i> 用户信息管理</a> </li>
+                        <li class="nav-item"> <a href="/admin/orders"><i class="mdi mdi-content-paste"></i> 订单信息管理</a> </li>
+                        <li class="nav-item"> <a href="/admin/comment"><i class="mdi mdi-comment-multiple-outline"></i> 评论信息管理</a> </li>
+                        <li class="nav-item"> <a href="/admin/goodslist"><i class="mdi mdi-shopping"></i> 商品信息管理</a> </li>
+                    </ul>
+                </nav>
+            </div>
+
+        </aside>
+        <!--End 左侧导航-->
+
+        <!--头部信息-->
+        <header class="lyear-layout-header">
+
+            <nav class="navbar navbar-default">
+                <div class="topbar">
+
+                    <div class="topbar-left">
+                        <div class="lyear-aside-toggler">
+                            <span class="lyear-toggler-bar"></span>
+                            <span class="lyear-toggler-bar"></span>
+                            <span class="lyear-toggler-bar"></span>
+                        </div>
+                        <span class="navbar-page-title"> 编辑商品信息 </span>
+                    </div>
+
+                    <ul class="topbar-right">
+                        <li class="dropdown dropdown-profile">
+                            <a href="javascript:void(0)" data-toggle="dropdown">
+                                <img class="img-avatar img-avatar-48 m-r-10" src="/images/users/avatar.jpg" alt="JANE" />
+                                <span>{{user.username}} <span class="caret"></span></span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li> <a href="/"><i class="mdi mdi-home"></i> 网站首页</a></li>
+                                <!--<li> <a href="/admin/admininfo"><i class="mdi mdi-account"></i> 管理员个人信息</a> </li>
+                                <li> <a href="/admin/editadminpsw"><i class="mdi mdi-lock-outline"></i> 修改管理员密码</a> </li>-->
+                                <!--<li> <a href="javascript:void(0)"><i class="mdi mdi-delete"></i> 清空缓存</a></li>-->
+                                <li class="divider"></li>
+                                <li> <a href="/admin/exit"><i class="mdi mdi-logout-variant"></i> 退出登录</a> </li>
+                            </ul>
+                        </li>
+                        <!--切换主题配色-->
+                        <!--切换主题配色-->
+                    </ul>
+
+                </div>
+            </nav>
+
+        </header>
+        <!--End 头部信息-->
+
+        <!--页面主要内容-->
+        <main class="lyear-layout-content">
+
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <form method="post" action="/admin/doeditgoodinfo" enctype="multipart/form-data" class="site-form">
+                                    <div class="form-group">
+                                        <label for="goodname">名称</label>
+                                        <input type="hidden" name="goodid" value="{{goodid}}">
+                                        <input type="text" class="form-control" name="goodname" id="goodname" placeholder="输入商品名称" value="{{good.goodname}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="price">价格</label>
+                                        <input type="text" class="form-control" name="price" id="price" placeholder="输入商品价格" value="{{good.price}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="price">设置优惠</label>
+                                        <div class="example-box">
+                                            <p>优惠力度</p>
+                                            <label class="lyear-radio radio-inline radio-primary">
+                                                <input type="radio" name="discount" value="0.9" <%=good.discount=='0.9'?'checked':''%>><span>9折</span>
+                                            </label>
+                                            <label class="lyear-radio radio-inline radio-primary">
+                                                <input type="radio" name="discount" value="0.8" <%=good.discount=='0.8'?'checked':''%>><span>8折</span>
+                                            </label>
+                                            <label class="lyear-radio radio-inline radio-primary">
+                                                <input type="radio" name="discount" value="0.7" <%=good.discount=='0.7'?'checked':''%>><span>7折</span>
+                                            </label>
+                                            <label class="lyear-radio radio-inline radio-primary">
+                                                <input type="radio" name="discount" value="0.6" <%=good.discount=='0.6'?'checked':''%>><span>6折</span>
+                                            </label>
+                                            <label class="lyear-radio radio-inline radio-primary">
+                                                <input type="radio" name="discount" value="0.5" <%=good.discount=='0.5'?'checked':''%>><span>5折</span>
+                                            </label>
+                                            <label class="lyear-radio radio-inline radio-primary">
+                                                <input type="radio" name="discount" value="0.4" <%=good.discount=='0.4'?'checked':''%>><span>4折</span>
+                                            </label>
+                                            <label class="lyear-radio radio-inline radio-primary">
+                                                <input type="radio" name="discount" value="0.3" <%=good.discount=='0.3'?'checked':''%>><span>3折</span>
+                                            </label>
+                                            <label class="lyear-radio radio-inline radio-primary">
+                                                <input type="radio" name="discount" value="0.2" <%=good.discount=='0.2'?'checked':''%>><span>2折</span>
+                                            </label>
+                                            <label class="lyear-radio radio-inline radio-primary">
+                                                <input type="radio" name="discount" value="0.1" <%=good.discount=='0.1'?'checked':''%>><span>1折</span>
+                                            </label>
+                                        </div>
+                                        <div class="example-box">
+                                            <p>优惠对象</p>
+                                            <label class="lyear-radio radio-inline radio-primary">
+                                                <input type="radio" name="object" value="2" <%=good.object=='2'?'checked':''%>><span>不优惠</span>
+                                            </label>
+                                            <label class="lyear-radio radio-inline radio-primary">
+                                                <input type="radio" name="object" value="0" <%=good.object=='0'?'checked':''%>><span>全体用户</span>
+                                            </label>
+                                            <label class="lyear-radio radio-inline radio-primary">
+                                                <input type="radio" name="object" value="1" <%=good.object=='1'?'checked':''%>><span>仅VIP用户</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="style">类别</label>
+                                        <select class="form-control" id="style" name="style" size="1">
+                                            {{if good.style=='1'}}
+                                            <option value="1">男装</option>
+                                            <option value="0">女装</option>
+                                            {{else}}
+                                            <option value="0">女装</option>
+                                            <option value="1">男装</option>
+                                            {{/if}}
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="type">类型</label>
+                                        <select class="form-control" id="type" name="type" size="1">
+                                            {{if good.type=='1'}}
+                                            <option value="1">外套/裙子</option>
+                                            <option value="2">打底衫</option>
+                                            <option value="3">裤子</option>
+                                            <option value="4">打底裤</option>
+                                            {{else if good.type=='2'}}
+                                            <option value="2">打底衫</option>
+                                            <option value="1">外套/裙子</option>
+                                            <option value="3">裤子</option>
+                                            <option value="4">打底裤</option>
+                                            {{else if good.type=='3'}}
+                                            <option value="3">裤子</option>
+                                            <option value="1">外套/裙子</option>
+                                            <option value="2">打底衫</option>
+                                            <option value="4">打底裤</option>
+                                            {{else if good.type=='4'}}
+                                            <option value="4">打底裤</option>
+                                            <option value="1">外套/裙子</option>
+                                            <option value="2">打底衫</option>
+                                            <option value="3">裤子</option>
+                                            {{/if}}
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="model">型号</label>
+                                        <input type="text" class="form-control" name="model" id="model" placeholder="输入商品型号" value="{{good.model}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="style">图片</label>
+                                        {{if good.picture!=''}}
+                                        <img src="/images/goodclothes/{{good.picture}}" width="10%">
+                                        {{/if}}
+                                        <div class="edit-avatar-content">
+                                        <input width="20px" type="file" class="form-control" multiple="multiple" name="picture">
+                                        </div>
+                                        <input type="hidden" name="oldpicture" value="{{good.picture}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="details">详情</label>
+                                        <textarea type="text" class="form-control" name="details" id="details" placeholder="输入商品详情">{{good.details}}</textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="stock">库存</label>
+                                        <input type="text" class="form-control" name="stock" id="stock" placeholder="输入商品库存" value="{{good.stock}}">
+                                    </div>
+                                    <center>
+                                        <button type="submit" onclick="return window.confirm('您确定修改商品信息吗?');" class="btn btn-primary">更新信息</button>
+                                    </center>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+        <!--End 页面主要内容-->
+    </div>
+</div>
+
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/perfect-scrollbar.min.js"></script>
+<script type="text/javascript" src="/js/main.min.js"></script>
+
+<script type="text/javascript">
+    $(function(){
+        $('.search-bar .dropdown-menu a').click(function() {
+            var field = $(this).data('field') || '';
+            $('#search-field').val(field);
+            $('#search-btn').html($(this).text() + ' <span class="caret"></span>');
+        });
+    });
+</script>
+</body>
+</html>

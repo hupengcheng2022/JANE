@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>订单详情</title>
+    <link rel="icon" href="favicon.ico" type="image/ico">
+    <meta name="author" content="yinqi">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="/css/style.min.css" rel="stylesheet">
+    <script>
+        function cancellation(uid) {
+            if (confirm("确定注销账号？")){
+                location.href = "/cancellation?userid=" + uid;
+            }
+        }
+    </script>
+</head>
+
+<body>
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <!--左侧导航-->
+        <!--End 左侧导航-->
+
+        <!--头部信息-->
+        <header class="lyear-layout-header">
+
+            <nav class="navbar navbar-default">
+                <div class="topbar">
+                    <div class="topbar-left">
+                        <span class="navbar-page-title"><i class="mdi mdi-account-card-details"></i> 订单详情 </span>
+                    </div>
+
+                    <ul class="topbar-right">
+                        <li class="dropdown dropdown-profile">
+                            <a href="javascript:void(0)" data-toggle="dropdown">
+                                <img class="img-avatar img-avatar-48 m-r-10" src="/images/clothes/{{user.handportrait}}" alt="{{user.username}}" />
+                                <span>{{user.username}} <span class="caret"></span></span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li> <a href="/"><i class="mdi mdi-home"></i> 网站首页</a></li>
+                                {{if user.role=='1'}}
+                                <li> <a href="/admin/admin"><i class="mdi mdi-home"></i> 后台首页</a></li>
+                                {{else}}
+                                <li><a class="dropdown-item" href="/orders"><i class="mdi mdi-content-paste"></i> 查看订单</a></li>
+                                {{/if}}
+                              <!--  <li> <a href="/edituserpsw"><i class="mdi mdi-lock-outline"></i> 修改密码</a> </li>-->
+                                <!--<li> <a href="javascript:void(0)"><i class="mdi mdi-delete"></i> 清空缓存</a></li>-->
+                                <li class="divider"></li>
+                                <li> <a href="/admin/exit"><i class="mdi mdi-logout-variant"></i> 退出登录</a> </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!--End 头部信息-->
+
+        <!--页面主要内容-->
+        <main class="lyear-layout-sidebar-close" style="margin: 80px auto;width: 80%;">
+            <div >
+            <h5>订单号:{{ordernumber}}</h5>
+            <h5>下单时间:{{good.time}}</h5>
+            </div>
+            {{each goods item}}
+            <hr>
+            <section class="product_details mt-100 mb-100">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6">
+                            <div class="product-details-tab">
+                                <div id="img-1" class="zoomWrapper single-zoom" style="border: none;text-align: center;">
+                                    <img src="/images/goodclothes/{{item.picture}}" alt=" " style="width: 20%" class="img-fluid" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6" >
+                            <div class="product_d_right">
+                                <h6>{{item.goodname}}</h6>
+                                <div class=" product_ratting">
+                                </div>
+                                <div class="product_variant quantity">
+                                    {{if item.object=='0'}}
+                                    <span class="current_price" id="price">价格:￥{{item.price*item.discount}}</span>&nbsp
+                                    <del class="old_price">￥{{item.price}}</del>&nbsp
+                                    <span class="current_price" style="color: red;border: 1px solid red;">{{item.discount*10}}折</span>
+                                    {{else if item.object=='1'&&user.vip=='1'}}
+                                    <span class="current_price" id="price">价格:￥{{item.price*item.discount}}</span>&nbsp
+                                    <del class="old_price">￥{{item.price}}</del>&nbsp
+                                    <span class="current_price" style="color: red;border: 1px solid red;">{{item.discount*10}}折</span>
+                                    {{else}}
+                                    <span class="current_price" id="price">价格:￥{{item.price}}</span>&nbsp
+                                    {{/if}}
+                                </div>
+                                <div class="product_variant quantity">
+                                    <h6>详情:{{item.details}}</h6>
+                                    <span class="current_price"></span>
+                                </div>
+                                <div class="product_variant quantity">
+                                    <h6>尺寸:{{item.size}}</h6>
+                                </div>
+                                <div class="product_variant quantity">
+                                    <h6>数量:{{item.number}}</h6>
+                                </div>
+                                {{if item.state=='3'&&item.rstate=='0'&&user.role=='0'}}
+                                <form action="/comment" method="get">
+                                  <label>评论内容:</label>
+                                    <input type="text" name="content" maxlength="50" placeholder="50字以内" class="form-control" style="width: 50%" required><br>
+                                    <input type="hidden" value="{{item.goodid}}" name="goodid">
+                                    <input type="hidden" value="{{item.ordernumber}}" name="ordernumber">
+                                <button class="btn btn-primary" type="submit">评论</button>
+                                </form>
+                                {{/if}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <hr>
+            {{/each}}
+            <h5>总计:￥{{good.total}}</h5>
+            <hr>
+            {{if good.rstate=='2'}}
+            {{else if good.state=='1'&&good.rstate=='0'&&user.role=='0'}}
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <form method="post" action="/dopayment" class="site-form">
+                                    <div class="form-group">
+                                    <label for="phone">电话</label>
+                                    <input type="text" class="form-control" name="phone" id="phone" placeholder="输入您的电话" value="{{good.phone}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="address">收货地址</label>
+                                        <input type="text" class="form-control" name="address" id="address" placeholder="输入您的收货地址" value="{{good.address}}">
+                                        <input type="hidden" name="ordernumber" value="{{ordernumber}}">
+                                    </div>
+                                    <center>
+                                        <button type="submit" onclick="return window.confirm('您确定修改地址吗?');" class="btn btn-primary">修改地址</button>
+                                    </center>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{else if good.state=='2'&&good.rstate=='0'&&user.role=='0'}}
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <form method="post" action="/dopayment" class="site-form">
+                                    <div class="form-group">
+                                        <label for="phone">电话</label>
+                                        <input type="text" class="form-control" name="phone" id="phone" placeholder="输入您的电话" value="{{good.phone}}" readonly="readonly">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="address">收货地址</label>
+                                        <input type="text" class="form-control" name="address" id="address" placeholder="输入您的收货地址" value="{{good.address}}" readonly="readonly">
+                                        <input type="hidden" name="ordernumber" value="{{ordernumber}}">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{else if good.state=='3'&&good.rstate=='0'&&user.role=='0'}}
+            {{else if user.role=='1'}}
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <form class="site-form">
+                                    <div class="form-group">
+                                        <label for="username">用户名</label>
+                                        <input type="text" class="form-control" name="username" id="username" value="{{good.username}}" readonly="readonly">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="phone">电话</label>
+                                        <input type="text" class="form-control" name="phone" id="phone" value="{{good.phone}}" readonly="readonly">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="address">收货地址</label>
+                                        <input type="text" class="form-control" name="address" id="address" value="{{good.address}}" readonly="readonly">
+                                        <input type="hidden" name="ordernumber" value="{{ordernumber}}">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{/if}}
+        </main>
+        <!--End 页面主要内容-->
+    </div>
+</div>
+
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/perfect-scrollbar.min.js"></script>
+<script type="text/javascript" src="/js/main.min.js"></script>
+<script type="text/javascript">
+    $(function(){
+        $('.search-bar .dropdown-menu a').click(function() {
+            var field = $(this).data('field') || '';
+            $('#search-field').val(field);
+            $('#search-btn').html($(this).text() + ' <span class="caret"></span>');
+        });
+    });
+</script>
+</body>
+</html>

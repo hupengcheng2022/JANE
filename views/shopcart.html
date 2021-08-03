@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>购物车</title>
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/carts.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <!-- Bootstrap-Core-CSS -->
+
+    <!-- owl carousel -->
+    <link rel="stylesheet" href="css/goodstyle.css" type="text/css" media="all" />
+    <link href="css/blast.min.css" rel="stylesheet" />
+    <link href="/css/materialdesignicons.min.css" rel="stylesheet">
+    <!-- Style-CSS -->
+    <!-- font-awesome-icons -->
+    <link href="css/font-awesome.css" rel="stylesheet">
+    <!-- //font-awesome-icons -->
+    <!--lightbox -->
+    <link rel="stylesheet" href="css/lightbox.css">
+    <!-- lightbox -->
+
+
+    <!-- Font-Awesome-Icons-CSS -->
+    <link href="http://fonts.googleapis.com/css?family=Oswald:300,400,500,600,700" rel="stylesheet">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800" rel="stylesheet">
+</head>
+<body>
+<div class="main">
+    <div id="page">
+        <div id="home" class="banner" data-blast="bgColor">
+            <!--/banner-->
+            <nav class="navbar navbar-expand-lg mb-4 top-bar navbar-static-top sps sps--abv" style="background-color: #f7f7f7;">
+                <div class="container">
+                    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarCollapse1" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"><i class="fa fa-bars" aria-hidden="true"></i></span>
+                    </button>
+                    <a class="navbar-brand mx-auto" href="index.html" style="color: black;">JANE <span data-blast="color">CLOTHES</span></a>
+                    <div class="collapse navbar-collapse" id="navbarCollapse1">
+                        <ul class="navbar-nav ml-auto">
+                            {{if !user}}
+                            <li class="nav-item">
+                                <a class="nav-link" href="/login" style="color:black;">登录 | 注册</a>
+                            </li>
+                            {{else}}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdowns" data-toggle="dropdown" style="color: black;">
+                                    {{user.username}}
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-left">
+                                    {{if user.role=='1'}}
+                                    <li><a class="dropdown-item" href="/admin"><i class="mdi mdi-wrench"></i> 后台管理</a></li>
+                                    {{else}}
+                                    <li><a class="dropdown-item" href="/shopcart"><i class="mdi mdi-cart"></i> 购物车</a></li>
+                                    <li><a class="dropdown-item" href="/orders"><i class="mdi mdi-content-paste"></i> 查看订单</a></li>
+                                    <li><a class="dropdown-item" href="/userinfo"><i class="mdi mdi-account"></i> 个人中心</a></li>
+                                    {{/if}}
+                                    <li><a class="dropdown-item" href="/admin/exit"><i class="mdi mdi-logout-variant"></i> 退出</a></li>
+                                </ul>
+                            </li>
+                            {{/if}}
+                        </ul>
+                        <form class="form-inline my-2 my-lg-0 ml-5" method="get" action='/search'>
+                            <input class="search form-control mr-sm-2" name="goodname" type="search"  style="color: black;border: 1px solid black;">
+                            <button class="search btn btn-outline-success my-2 my-sm-0" type="submit" style="color: black;border: 1px solid black;">搜 索</button>
+                        </form>
+                        <ul class="navbar-nav ml-auto">
+                            {{if user}}
+                            <li class="nav-item active"><a class="nav-link" href="/shopcart"><i class="mdi mdi-cart"></i> 购物车</a></li>
+                            {{/if}}
+                            <li class="nav-item"> <a class="nav-link" href="/" style="color: black;">首页 <span class="sr-only">(current)</span></a> </li>
+                            <li class="nav-item"> <a class="nav-link" href="/goods?style=1&type=1" data-blast="color">男装</a> </li>
+                            <li class="nav-item"> <a class="nav-link" href="/goods?style=0&type=1">女装</a> </li>
+                            <li class="nav-item"> <a class="nav-link" href="/about">关于我们</a> </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>
+<section class="cartMain">
+    <div class="cartMain_hd">
+        <ul class="order_lists cartTop">
+            <li class="list_chk">
+                <!--所有商品全选-->
+                <input type="checkbox" id="all" class="whole_check">
+                <label for="all"></label>
+                全选
+            </li>
+            <li class="list_con">商品信息</li>
+            <li class="list_info">尺寸</li>
+            <li class="list_price">单价</li>
+            <li class="list_amount">数量</li>
+            <li class="list_sum">金额</li>
+            <li class="list_op">操作</li>
+        </ul>
+    </div>
+    <div class="cartBox">
+        <div class="order_content">
+            {{each cart item}}
+            <ul class="order_lists">
+                <li class="list_chk">
+                    {{if item.state=='1'}}
+                    <input type="checkbox" id="{{item.cartid}}s" class="son_check" value="{{item.goodid}}">
+                    <label for="{{item.cartid}}s"></label>
+                    {{/if}}
+                </li>
+                <li class="list_con">
+                    <div class="list_img"><a href="/goodsdetails?goodid={{item.goodid}};"><img src="/images/goodclothes/{{item.picture}}" style="width: 80%" alt=""></a></div>
+                    <div class="list_text"><a href="/goodsdetails?goodid={{item.goodid}};">{{item.goodname}}</a>
+                        {{if item.state=='2'}}
+                        <hr>
+                        该商品已失效
+                        {{/if}}
+                    </div>
+                </li>
+                <li class="list_info">
+                    <p>{{item.size}}</p>
+                </li>
+                <li class="list_price">
+                    {{if item.object=='0'}}
+                    <p class="price">￥{{item.price*item.discount}}</p>
+                    <del style="display: block;">￥{{item.price}}</del>
+                    <span class="current_price" style="padding: 2px;color: red;border: 1px solid red;">{{item.discount*10}}折</span>
+                    {{else if item.object=='1'&&user.vip=='1'}}
+                    <p class="price">￥{{item.price*item.discount}}</p>
+                    <del style="display: block;">￥{{item.price}}</del>
+                    <span class="current_price" style="padding: 2px;color: red;border: 1px solid red;">{{item.discount*10}}折</span>
+                    {{else}}
+                    <p class="price">￥{{item.price}}</p>
+                    {{/if}}
+                </li>
+                <li class="list_amount">
+                    <div class="amount_box" id="{{item.cartid}}">
+                        <a class="reduce reSty">-</a>
+                        <input type="text" value="{{item.number}}" class="sum">
+                        <a class="plus">+</a>
+                    </div>
+                </li>
+                <li class="list_sum">
+                    <p class="sum_price">￥
+                        {{if item.object=='0'}}
+                        {{item.price*item.discount}}
+                        {{else if item.object=='1'&&user.vip=='1'}}
+                        {{item.price*item.discount}}
+                        {{else}}
+                        {{item.price}}
+                        {{/if}}
+                    </p>
+                </li>
+                <li class="list_op">
+                    <p class="del"><a href="javascript:if(confirm('您是否要移除该商品?')){location.href='/delcart?cartid={{item.cartid}}'}">移除商品</a></p>
+                </li>
+            </ul>
+            {{/each}}
+        </div>
+    </div>
+    <!--底部-->
+    <div class="bar-wrapper">
+        <div class="bar-right">
+            <div class="piece">已选商品<strong class="piece_num">0</strong>件</div>
+            <div class="totalMoney">共计: <strong class="total_text" id="total">0.00</strong></div>
+            <div class="calBtn"><a href="javascript:;" onclick="settlement()">结算</a></div>
+        </div>
+    </div>
+</section>
+<section class="banner-bottom-wthree py-md-5 py-3" style="margin-top: -100px;" id="gallery">
+    <div class="container">
+        <div style="background-color: rgba(0,0,0,0.9);color: white;padding: 10px 0 10px 0;margin-top: 40px">
+            <h4 style="position: relative;right: -20px">猜你喜欢</h4>
+        </div>
+        <hr>
+        <div class="row gallery_grid-more project-grids">
+            {{each goods item}}
+            <div class="col-md-3 p-0 pr-2 col-sm-3 col-6 personal_gallery_grid1 hover14 column" style="margin-top: -10px">
+                {{if item.object=='0'}}
+                <span class="current_price" style="padding: 8px;color: red;border: 1px solid red;border-radius: 60px;position: absolute;top: 12px;z-index: 10;margin-top:-10px">{{item.discount*10}}折</span>
+                {{else if item.object=='1'&&user.vip=='1'}}
+                <span class="current_price" style="padding: 8px;color: red;border: 1px solid red;border-radius: 60px;position: absolute;top: 12px;z-index: 10;margin-top:-10px">{{item.discount*10}}折</span>
+                {{/if}}
+                <div class="personal_gallery_effect">
+                    <a href="/goodsdetails?goodid={{item.goodid}}" style="margin-top: 100px" data-title="{{item.goodname}}">
+                        <img src="/images/goodclothes/{{item.picture}}" alt=" " class="img-fluid" />
+                        <a style="margin-left: 6px" href="/goodsdetails?goodid={{item.goodid}}">{{item.goodname}}</a>
+                        <p style="position: relative;top: -26px;left: 200px">￥:{{item.price}}元 <br>{{item.number}}人已付款</p>
+                    </a>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+        <hr style="margin-top: -30px">
+    </div>
+</section>
+<footer class="action-sec py-lg-5 py-3">
+    <div class="container-fluid px-lg-5 px-3">
+        <div class="row">
+            <div class="col-lg-5 footer-grid">
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <h3 class="text-uppercase mb-3 ">友情链接</h3>
+                        <p><a href="http://www.taobao.com" target="_blank" style="color: #7b7d7d;">淘宝：http://taobao.com</a></p>
+                        <p><a href="http://www.Vip.com" target="_blank" style="color: #7b7d7d;">唯品会：http://Vip.com</a></p>
+                        <p><a href="http://www.adidas.com.cn" target="_blank" style="color: #7b7d7d;">阿迪达斯：http://adidas.com.cn</a></p>
+                        <a href="http://weixin.qq.com" target="_blank" class="facebook-footer mr-2"><span class="fa fa-comments mr-1"></span> 微信</a>
+                        <a href="http://im.qq.com" target="_blank" class="twitter-footer"><span class="fa fa-qq"></span> QQ</a>
+                    </div>
+                    <div class="col-md-6">
+                        <h3 class="mb-4">地址</h3>
+                        <address class="mb-0">
+                            <p class="mb-2"><i class="fas fa-map-marker-alt"></i>湖南科技职业学院</p>
+                            <p><i class="fa fa-phone mr-1"></i> +135 4851 6561</p>
+                            <p><i class="fa fa-fax mr-1"></i> +176 7474 6020</p>
+                            <p><i class="fa fa-envelope-open  mr-1"></i> <a href="mailto:hpc13548516561@outlook.com">hpc13548516561@outlook.com</a></p>
+                        </address>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 footer-grid">
+                <h3 class="mb-4">成员</h3>
+                <div class="blog-grids row mb-3">
+                    <div class="col-md-4 blog-grid-left">
+                        <a href="single.html">
+                            <img src="/images/5.jpg" class="img-fluid" alt="">
+                        </a>
+                    </div>
+                    <div class="col-md-8 blog-grid-right">
+                        <div class="sub-meta">
+                            <span><i class="far fa-clock"></i>姓名：胡鹏程</span>
+                        </div>
+                        <div class="sub-meta">
+                            <span><i class="far fa-clock"></i>电话：13548516561</span>
+                        </div>
+                        <div class="sub-meta">
+                            <span><i class="far fa-clock"></i>QQ：2560829571</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="blog-grids row mb-3">
+                    <div class="col-md-4 blog-grid-left">
+                        <a href="single.html">
+                            <img src="/images/6.jpg" class="img-fluid" alt="">
+                        </a>
+                    </div>
+                    <div class="col-md-8 blog-grid-right">
+                        <div class="sub-meta">
+                            <span><i class="far fa-clock"></i>姓名：邓林杰</span>
+                        </div>
+                        <div class="sub-meta">
+                            <span><i class="far fa-clock"></i>电话：13548516561</span>
+                        </div>
+                        <div class="sub-meta">
+                            <span><i class="far fa-clock"></i>QQ：2560829571</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="blog-grids row mb-3">
+                    <div class="col-md-4 blog-grid-left">
+                        <a href="single.html">
+                            <img src="/images/4.jpg" class="img-fluid" alt="">
+                        </a>
+                    </div>
+                    <div class="col-md-8 blog-grid-right">
+                        <div class="sub-meta">
+                            <span><i class="far fa-clock"></i>姓名：欧杰</span>
+                        </div>
+                        <div class="sub-meta">
+                            <span><i class="far fa-clock"></i>电话：13548516561</span>
+                        </div>
+                        <div class="sub-meta">
+                            <span><i class="far fa-clock"></i>QQ：2560829571</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 footer-grid">
+                <h3 class="mb-4">我们的服务</h3>
+                <ul>
+                    <li><i class="fa mr-1 fa-long-arrow-alt-right"></i> 最好的材料，最细致的做工；</li>
+                    <li><i class="fa mr-1 fa-long-arrow-alt-right"></i> 最贴心的客服，最真实的质量；</li>
+                    <li><i class="fa mr-1 fa-long-arrow-alt-right"></i> 最合适的选择。</li>
+                </ul>
+                <h3 class="mt-4 mb-4">新闻</h3>
+                <p class="mb-3">订阅我们的时事通讯，获取新闻、优惠及更多信息。</p>
+                <form action="#" method="post">
+                    <input type="email" name="Email" placeholder="输入您的电子邮件..." required="">
+                    <button class="btn1" data-blast="bgColor"><i class="fa fa-envelope-o" aria-hidden="true"></i></button>
+                    <div class="clearfix"> </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--<div class="copyright mt-md-5 mt-4 text-center">
+        <p>Copyright &copy; 2019.Company name All rights reserved.<a target="_blank" href="http://sc.chinaz.com/moban/">&#x7F51;&#x9875;&#x6A21;&#x677F;</a></p>
+
+    </div>-->
+
+</footer>
+<script>
+    function settlement(){
+        let goods=new Array();
+        $(".son_check:checked").each(function(i,item){
+            let goodid=item.value;
+            let size=item.parentNode.parentNode.childNodes[5].childNodes[1].innerHTML;
+            let number=item.parentNode.parentNode.childNodes[9].childNodes[1].childNodes[3].value;
+            let cartid=item.parentNode.parentNode.childNodes[9].childNodes[1].id;
+            let price=item.parentNode.parentNode.childNodes[11].childNodes[1].innerText.substr(1);
+            //alert(price);
+            goods.push({size:size,goodid:goodid,price:price,number:number,cartid:cartid});
+        });
+        let total=document.getElementById("total").innerHTML.substr(1);
+        $.ajax({
+            type:'post',//提交方式有post、get两种
+            url:'/settlement',//提交的地址
+            data:{//提交的数据
+                goods:goods,
+                total:total
+            },
+            success:function(result){//提交到后台查询成功后所执行的函数，这里result就是查询结果
+                location.href='/showpayment?ordernumber='+result;
+            }
+        });
+    }
+</script>
+<script src="js/jquery-2.2.3.min.js"></script>
+<script src="js/boost.js"></script>
+<script src="js/blast.min.js"></script>
+<script src="js/lightbox-plus-jquery.min.js"></script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/carts.js"></script>
+<script src="js/bootstrap.js"></script>
+</body>
+</html>

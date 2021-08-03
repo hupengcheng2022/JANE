@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <!--  <meta http-equiv="refresh" content="3;url='index.php'">-->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>商品列表</title>
+  <link rel="icon" href="/favicon.ico" type="image/ico">
+  <meta name="author" content="yinqi">
+  <link href="/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="/css/style.min.css" rel="stylesheet">
+  <style>
+    th,td{
+      text-align: center;
+    }
+    .djbtn{
+      margin: 2px 0;
+    }
+  </style>
+  <script>
+    function updown(gid,stat) {
+      if (stat=="1"){
+        if (confirm('您是否要上架该商品？')) {
+          location.href = "/admin/updown?goodid=" + gid + "&state=" + stat;
+          //console.log(stat);
+        }
+      }
+      if (stat=="2"){
+        if (confirm('您是否要下架该商品？')) {
+          location.href = "/admin/updown?goodid=" + gid + "&state=" + stat;
+          //console.log(stat);
+        }
+      }
+    }
+    function dohost(gid,host) {
+      if (host=="1"){
+        if (confirm('您是否要设置该商品为热门？')) {
+          location.href = "/admin/dohost?goodid=" + gid + "&host=" + host;
+          //console.log(stat);
+        }
+      }
+      if (host=="0"){
+        if (confirm('您是否要设置该商品为非热门？')) {
+          location.href = "/admin/dohost?goodid=" + gid + "&host=" + host;
+          //console.log(stat);
+        }
+      }
+    }
+    function dodiscount(gid,discount) {
+      if (discount=="1"){
+        if (confirm('您是否要设置该商品为优惠商品？')) {
+          location.href = "/admin/dodiscount?goodid=" + gid + "&discount=" + discount;
+          //console.log(stat);
+        }
+      }
+      if (discount=="0"){
+        if (confirm('您是否要取消设置该商品为优惠商品？')) {
+          location.href = "/admin/dodiscount?goodid=" + gid + "&discount=" + discount;
+          //console.log(stat);
+        }
+      }
+    }
+    function showeditgood(gid) {
+          location.href = "/admin/showeditgood?goodid=" + gid;
+    }
+    function addgood() {
+          location.href = "/admin/addgood"
+    }
+    function delgood(gid) {
+      if (confirm('您是否要删除该商品？')) {
+        location.href = "/admin/delgood?goodid=" + gid;
+        //console.log(stat);
+      }
+    }
+  </script>
+</head>
+
+<body>
+<div class="lyear-layout-web">
+  <div class="lyear-layout-container">
+    <!--左侧导航-->
+    <aside class="lyear-layout-sidebar">
+
+      <!-- logo -->
+      <div id="logo" class="sidebar-header">
+        <a><img src="/images/logo-sidebar.png" title="JANE" alt="JANE" /></a>
+      </div>
+      <div class="lyear-layout-sidebar-scroll">
+
+        <nav class="sidebar-main">
+          <ul class="nav nav-drawer">
+            <li class="nav-item"> <a href="/admin/admin"><i class="mdi mdi-home"></i> 后台首页</a> </li>
+            <li class="nav-item"> <a href="/admin/userslist"><i class="mdi mdi-account-multiple"></i> 用户信息管理</a> </li>
+            <li class="nav-item"> <a href="/admin/orders"><i class="mdi mdi-content-paste"></i> 订单信息管理</a> </li>
+            <li class="nav-item"> <a href="/admin/comment"><i class="mdi mdi-comment-multiple-outline"></i> 评论信息管理</a> </li>
+            <li class="nav-item active"> <a href="/admin/goodslist"><i class="mdi mdi-shopping"></i> 商品信息管理</a> </li>
+          </ul>
+        </nav>
+      </div>
+
+    </aside>
+    <!--End 左侧导航-->
+
+    <!--头部信息-->
+    <header class="lyear-layout-header">
+
+      <nav class="navbar navbar-default">
+        <div class="topbar">
+
+          <div class="topbar-left">
+            <div class="lyear-aside-toggler">
+              <span class="lyear-toggler-bar"></span>
+              <span class="lyear-toggler-bar"></span>
+              <span class="lyear-toggler-bar"></span>
+            </div>
+            <span class="navbar-page-title"> 商品信息管理 </span>
+          </div>
+
+          <ul class="topbar-right">
+            <li class="dropdown dropdown-profile">
+              <a href="javascript:void(0)" data-toggle="dropdown">
+                <img class="img-avatar img-avatar-48 m-r-10" src="/images/users/avatar.jpg" alt="JANE" />
+                <span>{{user.username}} <span class="caret"></span></span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-right">
+                <li> <a href="/"><i class="mdi mdi-home"></i> 网站首页</a></li>
+                <!--<li> <a href="/admin/admininfo"><i class="mdi mdi-account"></i> 管理员个人信息</a> </li>
+                <li> <a href="/admin/editadminpsw"><i class="mdi mdi-lock-outline"></i> 修改管理员密码</a> </li>-->
+                <!--<li> <a href="javascript:void(0)"><i class="mdi mdi-delete"></i> 清空缓存</a></li>-->
+                <li class="divider"></li>
+                <li> <a href="/admin/exit"><i class="mdi mdi-logout-variant"></i> 退出登录</a> </li>
+              </ul>
+            </li>
+          </ul>
+
+        </div>
+      </nav>
+
+    </header>
+    <!--End 头部信息-->
+
+    <!--页面主要内容-->
+    <main class="lyear-layout-content">
+
+      <div class="container-fluid">
+
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <ul class="pager">
+                    <li class="previous">
+                      <a style="border: none;background-color: rgba(0,0,0,0);">
+                        <button type="button" onclick="addgood()" data-loading-text="处理中" class="btn btn-primary" autocomplete="off">
+                          添加商品
+                        </button>
+                      </a>
+                    </li>
+                    <li>
+                      <a style="border: none;background-color: rgba(0,0,0,0);">
+                        <form class="form-inline my-2 my-lg-0 ml-5" method="get" action='/admin/goodslist'>
+                          <input class="search form-control mr-sm-2" name="goodname" type="search">
+                          <button class="btn btn-primary" type="submit">搜 索</button>
+                        </form>
+                      </a>
+                    </li>
+                    <li class="next"><a style="background-color: #33cabb;color: white">商品数量:{{total}}</a></li>
+                  </ul>
+                  <table class="table table-hover table-condensed table-bordered">
+                    <thead>
+                    <tr>
+                      <th>名称</th>
+                      <th>价格</th>
+                      <th>类别</th>
+                      <th>类型</th>
+                      <th>图片</th>
+                      <th>详情</th>
+                      <th>库存</th>
+                      <th>热门</th>
+                      <th>状态</th>
+                      <th>销量</th>
+                      <th>型号</th>
+                      <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{each goods item}}
+                    <tr>
+                      <td>{{item.goodname}}</td>
+                      <td>{{item.price}}</td>
+                      <td>{{item.style=='1'?'男装':'女装'}}</td>
+                      <td>
+                        {{if item.type=='1'}}
+                        {{if item.style=='0'}}
+                        外套/裙子
+                        {{else if item.style=='1'}}
+                        外套
+                        {{/if}}
+                        {{else if item.type=='2'}}
+                        打底衫
+                        {{else if item.type=='3'}}
+                        外裤
+                        {{else if item.type=='4'}}
+                        打底裤
+                        {{/if}}
+                      </td>
+                      <td><img src="/images/goodclothes/{{item.picture}}" height="50"></td>
+                      <td>{{item.details}}</td>
+                      <td>{{item.stock}}</td>
+                      <td>{{item.host=='1'?'是':'否'}}</td>
+                      <!--<td>{{item.role=='0'?'客户':'管理员'}}</td>-->
+                        {{if item.state=='0'}}
+                      <td><font class="text-success">新增</font></td>
+                        {{else if item.state=='1'}}
+                      <td><font class="text-primary">上架</font></td>
+                        {{else}}
+                      <td><font class="text-warning">下架</font></td>
+                        {{/if}}
+                      <td>{{item.number}}</td>
+                      <td>{{item.model}}</td>
+                      <td>
+                        {{if item.state=='0'||item.state=='2'}}
+                        <button type="button" onclick="updown({{item.goodid}},1)" data-loading-text="处理中" class="btn btn-primary" autocomplete="off">
+                          上架
+                        </button>
+                      {{/if}}
+                      {{if item.state=='1'&&item.host!=='1'}}
+                        <button type="button" onclick="updown({{item.goodid}},2)" data-loading-text="处理中" class="btn btn-warning" autocomplete="off">
+                          下架
+                        </button>
+                        {{/if}}
+                        {{if item.state=='1'}}
+                        {{if item.host=='0'}}
+                        <button type="button" onclick="dohost({{item.goodid}},1)" data-loading-text="处理中" class="btn btn-info" autocomplete="off">
+                          上热门
+                        </button>
+                        {{else}}
+                        <button type="button" onclick="dohost({{item.goodid}},0)" data-loading-text="处理中" class="btn btn-dark" autocomplete="off">
+                          下热门
+                        </button>
+                        {{/if}}
+                        {{/if}}
+                      {{if item.state=='0'}}
+                      <button type="button" onclick="delgood({{item.goodid}})" data-loading-text="处理中" class="btn btn-danger" autocomplete="off">
+                        删除
+                      </button>
+                        {{/if}}
+                        {{if item.state!=='1'}}
+                        <button type="button" onclick="showeditgood({{item.goodid}})" data-loading-text="处理中" class="btn btn-primary" autocomplete="off">
+                          编辑
+                        </button>
+                        {{/if}}
+                      </td>
+                    </tr>
+                    {{/each}}
+                    </tbody>
+                  </table>
+                </div>
+                <ul class="pager">
+                  <li><a href="/admin/goodslist?curpage=1&goodname={{gname}}">首页</a></li>&nbsp;&nbsp;
+                  <li><a href="/admin/goodslist?curpage={{curpage==1?1:curpage-1}}&goodname={{gname}}">上一页</a></li>&nbsp;&nbsp;&nbsp;
+                  <li><a href="/admin/goodslist?curpage={{curpage==pages?pages:curpage+1}}&username={{gname}}">下一页</a></li>&nbsp;&nbsp;&nbsp;
+                  <li><a href="/admin/goodslist?curpage=<%=pages%>&goodname={{gname}}">尾页</a></li>&nbsp;
+                  <li class="next"><a style="background-color: #33cabb;color: white">当前页:{{curpage}}/{{pages}}</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!--End 页面主要内容-->
+  </div>
+</div>
+
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/perfect-scrollbar.min.js"></script>
+<script type="text/javascript" src="/js/main.min.js"></script>
+
+<script type="text/javascript">
+  /*  $(function(){
+      $('.search-bar .dropdown-menu a').click(function() {
+        var field = $(this).data('field') || '';
+        $('#search-field').val(field);
+        $('#search-btn').html($(this).text() + ' <span class="caret"></span>');
+      });
+    });*/
+/*  $('.djbtn').on('click', function () {
+    var $btn = $(this).button('loading');
+    setTimeout(function() {
+      $btn.button("reset")
+    }, 1e3)
+  });*/
+</script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>个人中心</title>
+<link rel="icon" href="favicon.ico" type="image/ico">
+<meta name="author" content="yinqi">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/materialdesignicons.min.css" rel="stylesheet">
+<link href="/css/style.min.css" rel="stylesheet">
+  <script>
+    function cancellation(uid) {
+      if (confirm("确定注销账号？")){
+        location.href = "/cancellation?userid=" + uid;
+      }
+    }
+    function qr() {
+      if (confirm("确定更新信息？")){
+        alert("更新成功!");
+        return true;
+      }else{
+        return false;
+      }
+    }
+  </script>
+</head>
+  
+<body>
+<div class="lyear-layout-web">
+  <div class="lyear-layout-container">
+    <!--左侧导航-->
+    <!--End 左侧导航-->
+    
+    <!--头部信息-->
+    <header class="lyear-layout-header">
+      
+      <nav class="navbar navbar-default">
+        <div class="topbar">
+          <div class="topbar-left">
+            <span class="navbar-page-title"><i class="mdi mdi-account-card-details"></i> 个人中心 </span>
+          </div>
+          
+          <ul class="topbar-right">
+            <li class="dropdown dropdown-profile">
+              <a href="javascript:void(0)" data-toggle="dropdown">
+                <img class="img-avatar img-avatar-48 m-r-10" src="/images/clothes/{{user.handportrait}}" alt="{{user.username}}" />
+                <span>{{user.username}} <span class="caret"></span></span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-right">
+                <li> <a href="/"><i class="mdi mdi-home"></i> 首页</a></li>
+                <li> <a href="/edituserpsw"><i class="mdi mdi-lock-outline"></i> 修改密码</a> </li>
+                <!--<li> <a href="javascript:void(0)"><i class="mdi mdi-delete"></i> 清空缓存</a></li>-->
+                <li class="divider"></li>
+                <li> <a href="/admin/exit"><i class="mdi mdi-logout-variant"></i> 退出登录</a> </li>
+              </ul>
+            </li>
+            <!--切换主题配色-->
+            <!--切换主题配色-->
+          </ul>
+          
+        </div>
+      </nav>
+      
+    </header>
+    <!--End 头部信息-->
+    
+    <!--页面主要内容-->
+    <main class="lyear-layout-sidebar-close" style="margin: 80px auto;width: 80%;">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-body">
+                <form action="/doHeand" method="POST" enctype="multipart/form-data">
+                <div class="edit-avatar">
+                  <img src="/images/clothes/{{user.handportrait}}" alt="..." class="img-avatar">
+                  <div class="avatar-divider"></div>
+                  <div class="edit-avatar-content" style="margin-top: 10px;">
+                    <input type="hidden" name="userid" value="{{user.userid}}">
+                    <input width="20px" type="file" class="form-control" multiple="multiple" name="handportrait" required>
+                    <button type="submit" class="btn btn-primary" onclick="return window.confirm('您确定修改头像吗?');">修改头像</button>
+                      <span style="color: red;">{{msg}}</span>
+                  </div>
+                </div>
+                </form>
+                <hr>
+                <form method="post" action="/doUserinfo" class="site-form">
+                  <div class="form-group">
+                    <label for="realname">真实姓名</label>
+                    <input type="hidden" name="userid" value="{{user.userid}}">
+                    <input type="hidden" name="handportrait" value="{{user.handportrait}}">
+                    <input type="text" class="form-control" name="realname" id="realname" placeholder="输入您的真实姓名" value="{{user.realname}}">
+                  </div>
+                  <div class="form-group">
+                    <label for="username">用户名</label>
+                    <input type="text" class="form-control" name="username" id="username" placeholder="输入您的昵称" value="{{user.username}}">
+                  </div>
+                  <div class="form-group">
+                    <label class="checkbox radio-primary">性别</label>
+                    <input type="radio" name="sex" value="男" <%=user.sex=='男'?'checked':''%>> 男
+                    <input type="radio" name="sex" value="女" <%=user.sex=='女'?'checked':''%>> 女
+                  </div>
+                  <div class="form-group">
+                    <label for="birthday">出生日期</label>
+                    <input type="date" class="form-control" name="birthday" id="birthday" placeholder="输入您的出生日期" value="{{user.birthday}}">
+                  </div>
+                  <div class="form-group">
+                    <label for="address">收货地址</label>
+                    <input type="text" class="form-control" name="address" id="address" placeholder="输入您的收货地址" value="{{user.address}}">
+                  </div>
+                  <div class="form-group">
+                    <label for="phone">电话</label>
+                    <input type="text" class="form-control" name="phone" id="phone" placeholder="输入您的电话" value="{{user.phone}}">
+                  </div>
+                  <div class="form-group">
+                    <label for="postcode">邮编</label>
+                    <input type="text" class="form-control" name="postcode" id="postcode" placeholder="输入您的邮编" value="{{user.postcode}}">
+                  </div>
+                  <div class="form-group">
+                    <label for="question">找回密码问题</label>
+                    <input type="text" class="form-control" name="question" id="question" placeholder="输入您的找回密码问题" value="{{user.question}}">
+                  </div>
+                  <div class="form-group">
+                    <label for="answer">找回密码答案</label>
+                    <input type="text" class="form-control" name="answer" id="answer" placeholder="输入您的找回密码答案" value="{{user.answer}}">
+                  </div>
+                  <center>
+                    <button type="submit" onclick="return qr()" class="btn btn-primary">更新信息</button>
+                  </center>
+                </form>
+                <center><br>
+                <button class="btn btn-danger" onclick="cancellation({{user.userid}})">注销账号</button>
+                </center>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+    <!--End 页面主要内容-->
+  </div>
+</div>
+
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/perfect-scrollbar.min.js"></script>
+<script type="text/javascript" src="/js/main.min.js"></script>
+<script type="text/javascript">
+  $(function(){
+    $('.search-bar .dropdown-menu a').click(function() {
+      var field = $(this).data('field') || '';
+      $('#search-field').val(field);
+      $('#search-btn').html($(this).text() + ' <span class="caret"></span>');
+    });
+  });
+</script>
+</body>
+</html>
